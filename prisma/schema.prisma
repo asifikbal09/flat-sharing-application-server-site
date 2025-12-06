@@ -14,17 +14,68 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id          String       @id @default(uuid())
+  name        String
+  email       String       @unique
+  password    String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  userProfile UserProfile?
+  booking     Booking[]
+
+  @@map("users")
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+model UserProfile {
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  bio        String
+  imageUrl   String
+  profession String
+  address    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("user-profile")
+}
+
+model Flat {
+  id                   String    @id @default(uuid())
+  squareFeet           Int
+  imageUrls           String[]
+  totalBedrooms        Int
+  totalRooms           Int
+  utilitiesDescription String
+  location             String
+  description          String
+  rent                 Int
+  availability         Boolean   @default(true)
+  advanceAmount        Int
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  booking              Booking[]
+
+  @@map("flats")
+}
+
+model Booking {
+  id        String        @id @default(uuid())
+  flatId    String
+  userId    String
+  status    BookingStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  flat Flat @relation(fields: [flatId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("bookings")
+}
+
+enum BookingStatus {
+  PENDING
+  BOOKED
+  REJECTED
 }
