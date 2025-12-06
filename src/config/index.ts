@@ -8,7 +8,7 @@ export default {
     port:process.env.PORT,
     saltRound:process.env.SALT_ROUND as string,
     tokenSecret:process.env.ACCESS_TOKEN_SECRET as string,
-    expire_in:process.env.ACCESS_TOKEN_EXPIRE_IN as string,
+    expire_in:Number(process.env.ACCESS_TOKEN_EXPIRE_IN) ,
     refreshTokenSecret:process.env.REFRESH_TOKEN_SECRET as string,
-    refreshTokenExpireIn:process.env.REFRESH_TOKEN_EXPIRE_IN as string
+    refreshTokenExpireIn:Number(process.env.REFRESH_TOKEN_EXPIRE_IN) 
 }
